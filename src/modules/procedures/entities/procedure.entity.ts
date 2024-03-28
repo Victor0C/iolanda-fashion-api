@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ProceduresPerformedEntity } from "../../sales/entities/proceduresPerformed.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'procedure' })
 export class ProcedureEntity {
@@ -13,6 +14,9 @@ export class ProcedureEntity {
 
     @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
     price: number
+
+    @OneToMany(() => ProceduresPerformedEntity, procedurePerformed => procedurePerformed.procedure)
+    proceduresPerformed: ProceduresPerformedEntity
 
     @CreateDateColumn({ name: 'created_at' })
     createdAT: String;

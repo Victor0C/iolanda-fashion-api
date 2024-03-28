@@ -10,10 +10,16 @@ import { ResponseProduct } from './dto/response-product';
 export class ProductsService {
   constructor(@InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>) { }
 
-  public async findProduct(id: string): Promise<ResponseProduct> {
+  public async productServiceAllData(id: string): Promise<ProductEntity> {
     const product = await this.productRepository.findOneBy({ id })
 
     if (!product) throw new NotFoundException('Product not found')
+
+    return product
+  }
+
+  public async findProduct(id: string): Promise<ResponseProduct> {
+    const product = await this.productServiceAllData(id)
 
     return new ResponseProduct(product)
   }

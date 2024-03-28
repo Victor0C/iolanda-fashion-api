@@ -2,16 +2,20 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './config/postgres.config.service';
-import { ProceduresModule } from './procedures/procedures.module';
-import { ProductsModule } from './products/products.module';
-import { UsersModule } from './users/users.module';
-import { CustomersModule } from './customers/customers.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { ProceduresModule } from './modules/procedures/procedures.module';
+import { ProductsModule } from './modules/products/products.module';
+import { SalesModule } from './modules/sales/sales.module';
+import { UsersModule } from './modules/users/users.module';
+
 
 @Module({
   imports: [
     UsersModule,
     ProductsModule,
     ProceduresModule,
+    CustomersModule,
+    SalesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -19,7 +23,6 @@ import { CustomersModule } from './customers/customers.module';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService],
     }),
-    CustomersModule,
   ],
 })
 export class AppModule { }

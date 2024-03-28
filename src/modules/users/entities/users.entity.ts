@@ -1,10 +1,12 @@
+import { SaleEntity } from '../../sales/entities/sale.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { TypeUser } from '../enums/typeUser.enum';
 
@@ -21,6 +23,9 @@ export class UserEntity {
 
   @Column({ name: 'type', length: 13, enum: TypeUser, nullable: false })
   type: TypeUser;
+
+  @OneToMany(() => SaleEntity, sale => sale.user)
+  sales: SaleEntity
 
   @CreateDateColumn({ name: 'created_at' })
   createdAT: String;

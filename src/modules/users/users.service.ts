@@ -10,10 +10,15 @@ import { UserEntity } from './entities/users.entity';
 export class UsersService {
     constructor(@InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>) { }
 
-    public async findUser(id: string): Promise<ResponseUser> {
+    public async findUserAllData(id: string): Promise<UserEntity> {
         const user = await this.userRepository.findOneBy({ id })
 
         if (!user) throw new NotFoundException('User not found')
+
+        return user
+    }
+    public async findUser(id: string): Promise<ResponseUser> {
+        const user = await this.findUserAllData(id)
 
         return new ResponseUser(user)
     }
@@ -36,7 +41,7 @@ export class UsersService {
     }
 
     public async updateUser(id: string, newUserData: UpdateUserDTO): Promise<ResponseUser> {
-        const user = await this.findUser(id)
+        const user = await this.findUserAllData(id)
         Object.assign(user, newUserData as UserEntity)
 
         const updatedUser = await this.userRepository.save(user)
@@ -45,7 +50,7 @@ export class UsersService {
     }
 
     public async deleteUser(id: string): Promise<void> {
-        await this.findUser(id)
+        await this.findUserAllData(id)
         await this.userRepository.delete(id)
     }
 }

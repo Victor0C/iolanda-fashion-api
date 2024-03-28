@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, NumericType, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ProductsSoldEntity } from "../../sales/entities/productsSold.entity";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'product' })
 export class ProductEntity {
@@ -13,6 +14,9 @@ export class ProductEntity {
 
     @Column({ name: 'amount', nullable: false })
     amount: number
+
+    @OneToMany(() => ProductsSoldEntity, productSold => productSold.product)
+    productSold: ProductsSoldEntity
 
     @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
     price: number

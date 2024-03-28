@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { SaleEntity } from "../../sales/entities/sale.entity"
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { AddressEntity } from "./address.entity"
 
 @Entity({ name: 'customers' })
@@ -21,6 +22,9 @@ export class CustomerEntity {
     @OneToOne(() => AddressEntity, adress => adress.customers, { cascade: true })
     @JoinColumn()
     address: AddressEntity
+
+    @OneToMany(() => SaleEntity, sale => sale.customer)
+    sales: SaleEntity
 
     @CreateDateColumn({ name: 'created_at' })
     createdAT: String;

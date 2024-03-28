@@ -10,6 +10,14 @@ import { ProcedureEntity } from './entities/procedure.entity';
 export class ProceduresService {
   constructor(@InjectRepository(ProcedureEntity) private readonly procedureRepository: Repository<ProcedureEntity>) { }
 
+  public async findProcedureAllData(id: string): Promise<ProcedureEntity> {
+    const procedure = await this.procedureRepository.findOneBy({ id })
+
+    if (!procedure) throw new NotFoundException('Procedure not found')
+
+    return procedure
+  }
+
   public async findProcedure(id: string): Promise<ResponseProcedure> {
     const procedure = await this.procedureRepository.findOneBy({ id })
 
