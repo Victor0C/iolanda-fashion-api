@@ -8,6 +8,9 @@ export class ProceduresPerformedEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
+    @Column({ name: 'name', nullable: false })
+    name: string
+
     @Column({ name: 'amount', nullable: false })
     amount: number
 
@@ -18,6 +21,6 @@ export class ProceduresPerformedEntity {
     procedure: ProcedureEntity
 
 
-    @ManyToOne(() => SaleEntity, sale => sale.proceduresPerformed)
+    @ManyToOne(() => SaleEntity, sale => sale.proceduresPerformed, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     sale: SaleEntity
 }

@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator"
 export class CreateProceduresPerformedDTO {
  
     @IsString()
-    @IsNotEmpty({ message: 'the id_procedureType field cannot be empty' })
+    @IsNotEmpty({ message: 'the id field cannot be empty' })
     id: string
     
     @IsNumber()
