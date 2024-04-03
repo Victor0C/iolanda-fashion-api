@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CustomersService } from '../customers/customers.service';
@@ -21,8 +21,7 @@ export class SalesService {
     private readonly procedureService: ProceduresService,
     private readonly productService: ProductsService,
     private readonly customerService: CustomersService,
-    @InjectRepository(SaleEntity)
-    private readonly saleRepository: Repository<SaleEntity>,
+    @InjectRepository(SaleEntity) private readonly saleRepository: Repository<SaleEntity>,
   ) {}
 
   private async buildProceduresPerformed(
@@ -58,19 +57,22 @@ export class SalesService {
     return proceduresPerformed;
   }
 
-  private async buildProductsSold(
-    createProductsSoldDTO: CreateProductsSoldDTO[],
-  ) {
+  private async buildProductsSold(createProductsSoldDTO: CreateProductsSoldDTO[]){
     const building = createProductsSoldDTO.map(async (productSold) => {
-      const productData = await this.productService.productServiceAllData(
-        productSold.id,
-      );
+      const productData = await this.productService.productServiceAllData(productSold.id);
+
+      if(productData.amount < productSold.amount){
+        throw new HttpException(`Not enough items in stock for ${productSold.amount} ${productData.name}`, HttpStatus.BAD_REQUEST)
+      }
+
+      await this.productService.updateProduct(productData.id, {amount: productData.amount - productSold.amount})
+
       const priceProductsSold = productData.price * productSold.amount;
 
       const objectForEntity = {
         id: productSold.id,
         name: productData.name,
-        amount: productSold.amount,
+        amount: productData.amount - productSold.amount,
         price: priceProductsSold,
         product: productData,
       };
@@ -124,18 +126,10 @@ export class SalesService {
   }
 
   public async createSale(createSaleDto: CreateSaleDto) {
-    const userSale = await this.userService.findUserAllData(
-      createSaleDto.id_user,
-    );
-    const customerSale = await this.customerService.findOneCustomer(
-      createSaleDto.id_customer,
-    );
-    const proceduresPerformedSale = await this.buildProceduresPerformed(
-      createSaleDto.proceduresPerformed,
-    );
-    const productSoldSale = await this.buildProductsSold(
-      createSaleDto.productsSold,
-    );
+    const userSale = await this.userService.findUserAllData(createSaleDto.id_user);
+    const customerSale = await this.customerService.findOneCustomer(createSaleDto.id_customer);
+    const proceduresPerformedSale = await this.buildProceduresPerformed(createSaleDto.proceduresPerformed);
+    const productSoldSale = await this.buildProductsSold(createSaleDto.productsSold);
     const priceSale = this.buildPrice(proceduresPerformedSale, productSoldSale);
 
     const objectForEntity = {
