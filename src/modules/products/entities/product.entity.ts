@@ -18,7 +18,7 @@ export class ProductEntity {
     @OneToMany(() => ProductsSoldEntity, productSold => productSold.product)
     productSold: ProductsSoldEntity
 
-    @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
+    @Column({ name: 'price', nullable: false })
     price: number
 
     @CreateDateColumn({ name: 'created_at' })

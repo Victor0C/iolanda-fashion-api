@@ -14,12 +14,11 @@ export class ProceduresPerformedEntity {
     @Column({ name: 'amount', nullable: false })
     amount: number
 
-    @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
+    @Column({ name: 'price', nullable: false })
     price: number
 
     @ManyToOne(() => ProcedureEntity, procedure => procedure.proceduresPerformed)
     procedure: ProcedureEntity
-
 
     @ManyToOne(() => SaleEntity, sale => sale.proceduresPerformed, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     sale: SaleEntity

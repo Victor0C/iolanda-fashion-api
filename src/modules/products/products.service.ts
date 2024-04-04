@@ -32,20 +32,22 @@ export class ProductsService {
     return products
   }
 
-  public async createProduct(newProductData: CreateProductDto): Promise<ResponseProduct> {
+  public async createProduct(createProductDTO: CreateProductDto): Promise<ResponseProduct> {
     const productEntity = new ProductEntity()
 
-    Object.assign(productEntity, newProductData as ProductEntity)
+    Object.assign(productEntity, createProductDTO as ProductEntity)
+    productEntity.price = productEntity.price * 100
 
     const newProduct = await this.productRepository.save(productEntity)
 
     return new ResponseProduct(newProduct)
   }
 
-  public async updateProduct(id: string, newProductData: UpdateProductDto): Promise<ResponseProduct> {
+  public async updateProduct(id: string, updateProductDTO: UpdateProductDto): Promise<ResponseProduct> {
     const product = await this.findProduct(id)
 
-    Object.assign(product, newProductData as ProductEntity)
+    updateProductDTO.price = updateProductDTO.price * 100
+    Object.assign(product, updateProductDTO as ProductEntity)
 
     const updatedProduct = await this.productRepository.save(product)
 

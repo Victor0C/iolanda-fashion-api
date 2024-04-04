@@ -12,7 +12,7 @@ export class ProcedureEntity {
     @Column({ name: 'description', length: 255, nullable: false })
     description: string
 
-    @Column({ name: 'price', type: 'numeric', precision: 10, scale: 2, nullable: false })
+    @Column({ name: 'price', nullable: false })
     price: number
 
     @OneToMany(() => ProceduresPerformedEntity, procedurePerformed => procedurePerformed.procedure)

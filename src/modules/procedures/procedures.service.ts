@@ -36,7 +36,9 @@ export class ProceduresService {
 
   public async createProcedure(createProcedureDto: CreateProcedureDto): Promise<ResponseProcedure> {
     const procedureEntity = new ProcedureEntity()
+    
     Object.assign(procedureEntity, createProcedureDto as ProcedureEntity)
+    procedureEntity.price = createProcedureDto.price * 100
 
     const newProcedure = await this.procedureRepository.save(procedureEntity)
 
@@ -45,8 +47,10 @@ export class ProceduresService {
 
   public async updateProcedure(id: string, updateProcedureDto: UpdateProcedureDto): Promise<ResponseProcedure> {
     const procedure = await this.findProcedure(id)
-    Object.assign(procedure, updateProcedureDto as ProcedureEntity)
 
+    updateProcedureDto.price = updateProcedureDto.price * 100
+    Object.assign(procedure, updateProcedureDto as ProcedureEntity)
+    
     const updatedProcedure = await this.procedureRepository.save(procedure)
 
     return new ResponseProcedure(updatedProcedure)

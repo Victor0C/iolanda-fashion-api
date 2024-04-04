@@ -6,6 +6,8 @@ export class ResponseSale {
 
         delete sale.deletedAT
 
+        sale.price = sale.price / 100
+
         if (sale.user) {
             delete sale.user.type
             delete sale.user.password
@@ -28,6 +30,10 @@ export class ResponseSale {
             sale.proceduresPerformed.forEach(
                 (procedurePerformed) => {
                     if (procedurePerformed?.procedure) {
+
+                        procedurePerformed.price = procedurePerformed.price / 100
+                        procedurePerformed.procedure.price = procedurePerformed.procedure.price / 100
+
                         delete procedurePerformed.procedure.createdAT
                         delete procedurePerformed.procedure.updatedAT
                         delete procedurePerformed.procedure.deletedAT
@@ -40,6 +46,10 @@ export class ResponseSale {
             sale.productsSold.forEach(
                 (productsSold) => {
                     if (productsSold?.product) {
+
+                        productsSold.price = productsSold.price / 100
+                        productsSold.product.price = productsSold.product.price / 100
+
                         delete productsSold.product.createdAT
                         delete productsSold.product.updatedAT
                         delete productsSold.product.deletedAT
