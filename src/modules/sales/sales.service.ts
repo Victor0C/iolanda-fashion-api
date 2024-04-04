@@ -36,7 +36,6 @@ export class SalesService {
           procedureData.price * procedurePerformed.amount
 
         const objectForEntity = {
-          id: procedurePerformed.id,
           name: procedureData.name,
           amount: procedurePerformed.amount,
           price: priceProcedurePerformed,
@@ -70,7 +69,6 @@ export class SalesService {
       const priceProductsSold = productData.price * productSold.amount
 
       const objectForEntity = {
-        id: productSold.id,
         name: productData.name,
         amount: productSold.amount,
         price: priceProductsSold,
