@@ -13,7 +13,7 @@ export class CustomersService {
   public async findOneCustomer(id: string): Promise<ResponseCustomer> {
     const customer = await this.customerRepository.findOne({ where: { id }, relations: { address: true } })
 
-    if (!customer) throw new NotFoundException('Customer not found')
+    if (!customer) throw new NotFoundException(`Customer not found (id: ${id})`)
 
     return new ResponseCustomer(customer)
   }

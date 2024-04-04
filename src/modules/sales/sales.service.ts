@@ -107,7 +107,7 @@ export class SalesService {
       relations: { user: true, proceduresPerformed: true, productsSold: true },
     })
 
-    if (!sale) throw new NotFoundException('Sale not found')
+    if (!sale) throw new NotFoundException(`Sale not found (id: ${id})`)
 
     return sale
   }

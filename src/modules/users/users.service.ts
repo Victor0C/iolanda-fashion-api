@@ -13,7 +13,7 @@ export class UsersService {
     public async findUserAllData(id: string): Promise<UserEntity> {
         const user = await this.userRepository.findOneBy({ id })
 
-        if (!user) throw new NotFoundException('User not found')
+        if (!user) throw new NotFoundException(`User not found (id: ${id})`)
 
         return user
     }

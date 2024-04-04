@@ -13,7 +13,7 @@ export class ProductsService {
   public async productServiceAllData(id: string): Promise<ProductEntity> {
     const product = await this.productRepository.findOneBy({ id })
 
-    if (!product) throw new NotFoundException('Product not found')
+    if (!product) throw new NotFoundException(`Product not found (id: ${id})`)
 
     return product
   }

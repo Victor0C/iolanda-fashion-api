@@ -13,7 +13,7 @@ export class ProceduresService {
   public async findProcedureAllData(id: string): Promise<ProcedureEntity> {
     const procedure = await this.procedureRepository.findOneBy({ id })
 
-    if (!procedure) throw new NotFoundException('Procedure not found')
+    if (!procedure) throw new NotFoundException(`Procedure not found (id: ${id})`)
 
     return procedure
   }
