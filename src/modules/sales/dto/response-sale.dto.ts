@@ -29,14 +29,11 @@ export class ResponseSale {
         if (sale.proceduresPerformed) {
             sale.proceduresPerformed.forEach(
                 (procedurePerformed) => {
+
+                    procedurePerformed.price = procedurePerformed.price / 100
+
                     if (procedurePerformed?.procedure) {
-
-                        procedurePerformed.price = procedurePerformed.price / 100
-                        procedurePerformed.procedure.price = procedurePerformed.procedure.price / 100
-
-                        delete procedurePerformed.procedure.createdAT
-                        delete procedurePerformed.procedure.updatedAT
-                        delete procedurePerformed.procedure.deletedAT
+                        delete procedurePerformed.procedure
                     }
                 }
             )
@@ -45,14 +42,11 @@ export class ResponseSale {
         if (sale.productsSold) {
             sale.productsSold.forEach(
                 (productsSold) => {
+
+                    productsSold.price = productsSold.price / 100
+
                     if (productsSold?.product) {
-
-                        productsSold.price = productsSold.price / 100
-                        productsSold.product.price = productsSold.product.price / 100
-
-                        delete productsSold.product.createdAT
-                        delete productsSold.product.updatedAT
-                        delete productsSold.product.deletedAT
+                        delete productsSold.product
                     }
                 }
             )
