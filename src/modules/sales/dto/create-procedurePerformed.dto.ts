@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator"
 
 export class CreateProceduresPerformedDTO {
  
+    @IsUUID()
     @IsString()
     @IsNotEmpty({ message: 'the id field cannot be empty' })
     id: string

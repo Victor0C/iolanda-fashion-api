@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator"
 
 export class CreateProductsSoldDTO {
 
+    @IsUUID()
     @IsString()
     @IsNotEmpty({ message: 'the id_productType field cannot be empty' })
     id: string
