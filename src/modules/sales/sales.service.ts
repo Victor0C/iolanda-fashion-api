@@ -72,7 +72,7 @@ export class SalesService {
       const objectForEntity = {
         id: productSold.id,
         name: productData.name,
-        amount: productData.amount - productSold.amount,
+        amount: productSold.amount,
         price: priceProductsSold,
         product: productData,
       }
@@ -165,7 +165,18 @@ export class SalesService {
   }
 
   public async deleteSale(id: string) {
-    await this.findOneSaleAllData(id)
+    const sale = await this.findOneSaleAllData(id)
+    console.log(sale)
+
+    await Promise.all(
+      sale.productsSold.map(
+       async (productsSold)=>{
+         const product = await this.productService.productServiceAllData(productsSold.id)
+         return this.productService.updateProduct(product.id, {amount: product.amount + productsSold.amount})
+       }
+     )
+    )
+
     await this.saleRepository.delete(id)
   }
 }
