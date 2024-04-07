@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './config/postgres.config.service';
@@ -8,7 +8,8 @@ import { ProductsModule } from './modules/products/products.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { UsersModule } from './modules/users/users.module';
 import { APP_FILTER } from '@nestjs/core';
-import { FilterErrors } from './utilities/filterErrors';
+import { FilterErrors } from './utilities/Errors/filterErrors';
+import { UuidValidationMiddleware } from './utilities/Middlewares/uuidValidation.middleware';
 
 
 @Module({
@@ -33,4 +34,14 @@ import { FilterErrors } from './utilities/filterErrors';
     }
   ]
 })
-export class AppModule { }
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UuidValidationMiddleware).forRoutes(
+      'users/:id',
+      'sales/:id',
+      'products/:id',
+      'procedures/:id',
+      'customers/:id'
+    )
+  }
+}

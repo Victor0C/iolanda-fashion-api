@@ -20,9 +20,7 @@ export class FilterErrors implements ExceptionFilter {
         }
        }
 
-
        response.status(status).json(body)
-
     }
 
 }
