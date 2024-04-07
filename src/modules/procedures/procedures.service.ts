@@ -48,7 +48,8 @@ export class ProceduresService {
   public async updateProcedure(id: string, updateProcedureDto: UpdateProcedureDto): Promise<ResponseProcedure> {
     const procedure = await this.findProcedure(id)
 
-    updateProcedureDto.price = updateProcedureDto.price * 100
+    if(updateProcedureDto.price) updateProcedureDto.price = updateProcedureDto.price * 100
+    
     Object.assign(procedure, updateProcedureDto as ProcedureEntity)
     
     const updatedProcedure = await this.procedureRepository.save(procedure)

@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateSaleDto } from './dto/create-sale.dto';
-import { UpdateSaleDto } from './dto/update-sale.dto';
-import { SalesService } from './sales.service';
 import { ResponseSale } from './dto/response-sale.dto';
+import { SalesService } from './sales.service';
 
 @Controller('sales')
 export class SalesController {
@@ -19,14 +18,9 @@ export class SalesController {
   }
 
   @Post()
-  public async createSale(@Body() createSaleDto: CreateSaleDto)/*: Promise<ResponseSale>*/ {
+  public async createSale(@Body() createSaleDto: CreateSaleDto): Promise<ResponseSale>{
 
     return this.salesService.createSale(createSaleDto)
-  }
-
-  @Put(':id')
-  public async updateSale(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto): Promise<ResponseSale> {
-    return this.salesService.updateSale(id, updateSaleDto)
   }
 
   @Delete(':id')

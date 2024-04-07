@@ -1,18 +1,15 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CustomersService } from '../customers/customers.service'
 import { ProceduresService } from '../procedures/procedures.service'
 import { ProductsService } from '../products/products.service'
 import { UsersService } from '../users/users.service'
-import { CreateProceduresPerformedDTO } from './dto/create-procedurePerformed.dto'
-import { CreateProductsSoldDTO } from './dto/create-productsSold.dto'
+import { BuildersForSales } from './buildersForSales'
 import { CreateSaleDto } from './dto/create-sale.dto'
 import { ResponseSale } from './dto/response-sale.dto'
-import { ProceduresPerformedEntity } from './entities/proceduresPerformed.entity'
 import { ProductsSoldEntity } from './entities/productsSold.entity'
 import { SaleEntity } from './entities/sale.entity'
-import { UpdateSaleDto } from './dto/update-sale.dto'
 
 @Injectable()
 export class SalesService {
@@ -21,85 +18,10 @@ export class SalesService {
     private readonly procedureService: ProceduresService,
     private readonly productService: ProductsService,
     private readonly customerService: CustomersService,
+    private readonly buildersForSales: BuildersForSales,
     @InjectRepository(SaleEntity) private readonly saleRepository: Repository<SaleEntity>,
+    @InjectRepository(ProductsSoldEntity) private readonly productsSoldRepository: Repository<ProductsSoldEntity>,
   ) {}
-
-  private async buildProceduresPerformed(
-    createProceduresPerformedDTO: CreateProceduresPerformedDTO[],
-  ) {
-    const building = createProceduresPerformedDTO.map(
-      async (procedurePerformed) => {
-        const procedureData = await this.procedureService.findProcedureAllData(
-          procedurePerformed.id,
-        )
-        const priceProcedurePerformed =
-          procedureData.price * procedurePerformed.amount
-
-        const objectForEntity = {
-          name: procedureData.name,
-          amount: procedurePerformed.amount,
-          price: priceProcedurePerformed,
-          procedure: procedureData,
-        }
-
-        const proceduresPerformedEntity = new ProceduresPerformedEntity()
-        Object.assign(
-          proceduresPerformedEntity,
-          objectForEntity as ProceduresPerformedEntity,
-        )
-
-        return proceduresPerformedEntity
-      },
-    )
-
-    const proceduresPerformed = await Promise.all(building)
-    return proceduresPerformed
-  }
-
-  private async buildProductsSold(createProductsSoldDTO: CreateProductsSoldDTO[]){
-    const building = createProductsSoldDTO.map(async (productSold) => {
-      const productData = await this.productService.productServiceAllData(productSold.id)
-
-      if(productData.amount < productSold.amount){
-        throw new HttpException(`Not enough items in stock for ${productSold.amount} ${productData.name}`, HttpStatus.BAD_REQUEST)
-      }
-
-      await this.productService.updateProduct(productData.id, {amount: productData.amount - productSold.amount})
-
-      const priceProductsSold = productData.price * productSold.amount
-
-      const objectForEntity = {
-        name: productData.name,
-        amount: productSold.amount,
-        price: priceProductsSold,
-        product: productData,
-      }
-
-      const productSoldEntity = new ProductsSoldEntity()
-      Object.assign(productSoldEntity, objectForEntity as ProductsSoldEntity)
-
-      return productSoldEntity
-    })
-
-    const productsSold = await Promise.all(building)
-    return productsSold
-  }
-
-  private buildPrice(
-    proceduresPerformed: ProceduresPerformedEntity[], productsSold: ProductsSoldEntity[]){
-
-    let price: number = 0
-
-    proceduresPerformed.forEach((procedure: ProceduresPerformedEntity) => {
-      price = Number(price) + Number(procedure.price)
-    })
-
-    productsSold.forEach((productsSold: ProductsSoldEntity) => {
-      price = Number(price) + Number(productsSold.price)
-    })
-
-    return price
-  }
 
   public async findOneSaleAllData(id: string) {
     const sale = await this.saleRepository.findOne({
@@ -125,11 +47,15 @@ export class SalesService {
   }
 
   public async createSale(createSaleDto: CreateSaleDto) {
+
+    const buildproceduresPerformedSale = () => {if(createSaleDto.proceduresPerformed) return this.buildersForSales.proceduresPerformed(createSaleDto.proceduresPerformed)}
+    const buildProductSoldSale = () => {if(createSaleDto.productsSold) return this.buildersForSales.CreateProductsSold(createSaleDto.productsSold)}
+
     const userSale = await this.userService.findUserAllData(createSaleDto.id_user)
     const customerSale = await this.customerService.findOneCustomer(createSaleDto.id_customer)
-    const proceduresPerformedSale = await this.buildProceduresPerformed(createSaleDto.proceduresPerformed)
-    const productSoldSale = await this.buildProductsSold(createSaleDto.productsSold)
-    const priceSale = this.buildPrice(proceduresPerformedSale, productSoldSale)
+    const proceduresPerformedSale = await buildproceduresPerformedSale()
+    const productSoldSale = await buildProductSoldSale()
+    const priceSale = this.buildersForSales.CreateSalePrice(proceduresPerformedSale, productSoldSale)
 
     const objectForEntity = {
       user: userSale,
@@ -147,31 +73,15 @@ export class SalesService {
     return new ResponseSale(sale)
   }
 
-  public async updateSale(id: string, updateSaleDto: UpdateSaleDto) {
-    const sale = await this.findOneSaleAllData(id)
-    const priceSale = this.buildPrice(
-      sale.proceduresPerformed,
-      sale.productsSold,
-    )
-    sale.price = priceSale
-
-    Object.assign(sale, updateSaleDto as SaleEntity)
-
-    const updatedUser = await this.saleRepository.save(sale)
-
-    return new ResponseSale(updatedUser)
-  }
-
   public async deleteSale(id: string) {
     const sale = await this.findOneSaleAllData(id)
-    console.log(sale)
 
     await Promise.all(
       sale.productsSold.map(
        async (productsSold)=>{
-         const product = await this.productService.productServiceAllData(productsSold.id)
-         return this.productService.updateProduct(product.id, {amount: product.amount + productsSold.amount})
-       }
+        const productSoldAllData = await this.productsSoldRepository.findOne({where: { id: productsSold.id }, relations: { product: true }})
+        return this.productService.updateProduct(productSoldAllData.product.id, {amount: productSoldAllData.product.amount + productsSold.amount})
+      }
      )
     )
 

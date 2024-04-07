@@ -10,7 +10,7 @@ import { ResponseProduct } from './dto/response-product';
 export class ProductsService {
   constructor(@InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>) { }
 
-  public async productServiceAllData(id: string): Promise<ProductEntity> {
+  public async findProductAllData(id: string): Promise<ProductEntity> {
     const product = await this.productRepository.findOneBy({ id })
 
     if (!product) throw new NotFoundException(`Product not found (id: ${id})`)
@@ -19,7 +19,7 @@ export class ProductsService {
   }
 
   public async findProduct(id: string): Promise<ResponseProduct> {
-    const product = await this.productServiceAllData(id)
+    const product = await this.findProductAllData(id)
 
     return new ResponseProduct(product)
   }
@@ -44,10 +44,12 @@ export class ProductsService {
   }
 
   public async updateProduct(id: string, updateProductDTO: UpdateProductDto): Promise<ResponseProduct> {
-    const product = await this.findProduct(id)
+    const product = await this.findProductAllData(id)
+  
+    if(updateProductDTO.price) updateProductDTO.price = updateProductDTO.price * 100
 
-    updateProductDTO.price = updateProductDTO.price * 100
     Object.assign(product, updateProductDTO as ProductEntity)
+   
 
     const updatedProduct = await this.productRepository.save(product)
 
