@@ -7,12 +7,9 @@ import { ProductsSoldEntity } from "./entities/productsSold.entity";
 
 @Injectable()
 export class BuildersForSales{
-    constructor( 
-        private readonly procedureService: ProceduresService,
-        private readonly productService: ProductsService,
-    ){}
+    constructor(private readonly procedureService: ProceduresService, private readonly productService: ProductsService){}
 
-    public async CreateProductsSold(createProductsSoldDTO: CreateProductsSoldDTO[]):Promise<ProductsSoldEntity[]>{
+    public async CreateProductsSold(createProductsSoldDTO: CreateProductsSoldDTO[]): Promise<ProductsSoldEntity[]>{
         const building = createProductsSoldDTO.map(async (productSold) => {
         const productData = await this.productService.findProductAllData(productSold.id)
     
@@ -42,46 +39,38 @@ export class BuildersForSales{
     }
 
     public async proceduresPerformed(proceduresPerformedDTO: CreateProductsSoldDTO[]): Promise<ProceduresPerformedEntity[]>{
-        const building = proceduresPerformedDTO.map(
-          async (updateProcedurePerformed) => {
-            const procedureData = await this.procedureService.findProcedureAllData(updateProcedurePerformed.id)
+      const building = proceduresPerformedDTO.map(
+        async (updateProcedurePerformed) => {
+          const procedureData = await this.procedureService.findOneProcedureAllData(updateProcedurePerformed.id)
 
-            const priceProcedurePerformed = procedureData.price * updateProcedurePerformed.amount
+          const priceProcedurePerformed = procedureData.price * updateProcedurePerformed.amount
     
-            const objectForEntity = {
-              name: procedureData.name,
-              amount: updateProcedurePerformed.amount,
-              price: priceProcedurePerformed,
-              procedure: procedureData,
+          const objectForEntity = {
+            name: procedureData.name,
+            amount: updateProcedurePerformed.amount,
+            price: priceProcedurePerformed,
+            procedure: procedureData,
             }
     
-            const proceduresPerformedEntity = new ProceduresPerformedEntity()
-            Object.assign(
-              proceduresPerformedEntity,
-              objectForEntity as ProceduresPerformedEntity,
-            )
+          const proceduresPerformedEntity = new ProceduresPerformedEntity()
+          Object.assign(proceduresPerformedEntity, objectForEntity as ProceduresPerformedEntity)
+
+          return proceduresPerformedEntity
+        }
+      )
     
-            return proceduresPerformedEntity
-          },
-        )
-    
-        const proceduresPerformed = await Promise.all(building)
-        return proceduresPerformed
-      }
+      const proceduresPerformed = await Promise.all(building)
+      return proceduresPerformed
+    }
 
 
     public CreateSalePrice(proceduresPerformed: ProceduresPerformedEntity[], productsSold: ProductsSoldEntity[]):number{
-        let price: number = 0
+      let price: number = 0
     
-        proceduresPerformed?.forEach((procedure: ProceduresPerformedEntity) => {
-          price = Number(price) + Number(procedure.price)
-        })
+      proceduresPerformed?.forEach((procedure: ProceduresPerformedEntity) => {price = Number(price) + Number(procedure.price)})
     
-        productsSold?.forEach((productsSold: ProductsSoldEntity) => {
-          price = Number(price) + Number(productsSold.price)
-          console.log(productsSold.price)
-        })
+      productsSold?.forEach((productsSold: ProductsSoldEntity) => {price = Number(price) + Number(productsSold.price)})
     
-        return price
+      return price
     }
 }

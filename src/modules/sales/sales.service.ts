@@ -23,30 +23,27 @@ export class SalesService {
     @InjectRepository(ProductsSoldEntity) private readonly productsSoldRepository: Repository<ProductsSoldEntity>,
   ) {}
 
-  public async findOneSaleAllData(id: string) {
-    const sale = await this.saleRepository.findOne({
-      where: { id },
-      relations: { user: true, proceduresPerformed: true, productsSold: true },
-    })
+  public async findOneSaleAllData(id: string): Promise<SaleEntity> {
+    const sale = await this.saleRepository.findOne({where: { id }, relations: { user: true, proceduresPerformed: true, productsSold: true }})
 
     if (!sale) throw new NotFoundException(`Sale not found (id: ${id})`)
 
     return sale
   }
 
-  public async findOneSale(id: string) {
+  public async findOneSale(id: string): Promise<ResponseSale> {
     const sale = await this.findOneSaleAllData(id)
 
     return new ResponseSale(sale)
   }
 
-  public async findAllSales() {
+  public async findAllSales(): Promise<ResponseSale[]> {
     const saleData = await this.saleRepository.find()
 
     return saleData.map((sale) => new ResponseSale(sale))
   }
 
-  public async createSale(createSaleDto: CreateSaleDto) {
+  public async createSale(createSaleDto: CreateSaleDto): Promise<ResponseSale> {
 
     if(!createSaleDto.proceduresPerformed && !createSaleDto.productsSold)
       throw new HttpException(`the sale needs at least one proceduresPerformed or productsSold`, HttpStatus.BAD_REQUEST)
@@ -76,7 +73,7 @@ export class SalesService {
     return new ResponseSale(sale)
   }
 
-  public async deleteSale(id: string) {
+  public async deleteSale(id: string): Promise<void> {
     const sale = await this.findOneSaleAllData(id)
 
     await Promise.all(

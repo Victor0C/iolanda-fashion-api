@@ -10,15 +10,15 @@ import { ProcedureEntity } from './entities/procedure.entity';
 export class ProceduresService {
   constructor(@InjectRepository(ProcedureEntity) private readonly procedureRepository: Repository<ProcedureEntity>) { }
 
-  public async findProcedureAllData(id: string): Promise<ProcedureEntity> {
-    const procedure = await this.procedureRepository.findOneBy({ id })
+  public async findOneProcedureAllData(id: string): Promise<ProcedureEntity> {
+    const procedure = await this.procedureRepository.findOne({where:{ id }})
 
     if (!procedure) throw new NotFoundException(`Procedure not found (id: ${id})`)
 
     return procedure
   }
 
-  public async findProcedure(id: string): Promise<ResponseProcedure> {
+  public async findOneProcedure(id: string): Promise<ResponseProcedure> {
     const procedure = await this.procedureRepository.findOneBy({ id })
 
     if (!procedure) throw new NotFoundException('Procedure not found')
@@ -46,7 +46,7 @@ export class ProceduresService {
   }
 
   public async updateProcedure(id: string, updateProcedureDto: UpdateProcedureDto): Promise<ResponseProcedure> {
-    const procedure = await this.findProcedure(id)
+    const procedure = await this.findOneProcedure(id)
 
     if(updateProcedureDto.price) updateProcedureDto.price = updateProcedureDto.price * 100
     
@@ -59,7 +59,7 @@ export class ProceduresService {
 
   public async deleteProcedure(id: string): Promise<void> {
 
-    await this.findProcedure(id)
+    await this.findOneProcedure(id)
     await this.procedureRepository.delete(id)
   }
 }

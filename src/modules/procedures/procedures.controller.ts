@@ -11,7 +11,7 @@ export class ProceduresController {
   @Get('/:id')
   public async findProcedure(@Param('id') id: string): Promise<ResponseProcedure> {
 
-    return this.proceduresService.findProcedure(id)
+    return this.proceduresService.findOneProcedure(id)
   }
 
   @Get()

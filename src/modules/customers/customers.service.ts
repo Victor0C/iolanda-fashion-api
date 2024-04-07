@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { ResponseCustomer } from './dto/response-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { CustomerEntity } from './entities/customer.entity';
 import { AddressEntity } from './entities/address.entity';
+import { CustomerEntity } from './entities/customer.entity';
 
 @Injectable()
 export class CustomersService {

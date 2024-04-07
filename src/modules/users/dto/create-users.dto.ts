@@ -1,7 +1,7 @@
 import { IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { TypeUser } from "../enums/typeUser.enum";
 
-export class UserDTO {
+export class CreateUserDTO {
 
     @IsNotEmpty({ message: 'the name field cannot be empty' })
     @IsString()

@@ -6,36 +6,31 @@ import { ResponseProduct } from './dto/response-product';
 
 @Controller('/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
 
   @Get('/:id')
-  public async findProduct(@Param('id') id: string): Promise<ResponseProduct> {
-
-    return this.productsService.findProduct(id)
+  public async findOneProduct(@Param('id') id: string): Promise<ResponseProduct> {
+    return this.productsService.findOneProduct(id)
   }
 
   @Get()
   public async findAllProducts(): Promise<ResponseProduct[]> {
-
     return this.productsService.findAllProducts()
   }
 
   @Post()
   public async createProduct(@Body() createProductDto: CreateProductDto): Promise<ResponseProduct> {
-
     return this.productsService.createProduct(createProductDto)
   }
 
   @Put('/:id')
-  public async updateProduct(@Param('id') id: string, @Body() newProductData: UpdateProductDto): Promise<ResponseProduct> {
-
-    return this.productsService.updateProduct(id, newProductData)
+  public async updateProduct(@Param('id') id: string, @Body() updateProductData: UpdateProductDto): Promise<ResponseProduct> {
+    return this.productsService.updateProduct(id, updateProductData)
   }
 
   @Delete('/:id')
   @HttpCode(204)
   public async deleteProduct(@Param('id') id: string): Promise<void> {
-
     return this.productsService.deleteProduct(id)
   }
 }
