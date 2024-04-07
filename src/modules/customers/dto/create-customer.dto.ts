@@ -1,5 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsString, Length, ValidateNested } from "class-validator"
-import { AddressDTO } from "./address.dto"
+import { CreateAddressDTO } from "./create-address.dto"
 import { Type } from "class-transformer"
 import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from "typeorm"
 
@@ -24,7 +24,7 @@ export class CreateCustomerDto {
     whatsapp: boolean
 
     @ValidateNested()
-    @Type(() => AddressDTO)
+    @Type(() => CreateAddressDTO)
     @IsNotEmpty({ message: 'the address field cannot be empty' })
-    address: AddressDTO
+    address: CreateAddressDTO
 }

@@ -5,15 +5,22 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { ResponseCustomer } from './dto/response-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerEntity } from './entities/customer.entity';
+import { AddressEntity } from './entities/address.entity';
 
 @Injectable()
 export class CustomersService {
   constructor(@InjectRepository(CustomerEntity) private readonly customerRepository: Repository<CustomerEntity>) { }
 
-  public async findOneCustomer(id: string): Promise<ResponseCustomer> {
+  public async findOneCustomerAllData(id: string): Promise<CustomerEntity> {
     const customer = await this.customerRepository.findOne({ where: { id }, relations: { address: true } })
 
     if (!customer) throw new NotFoundException(`Customer not found (id: ${id})`)
+
+    return customer
+  }
+
+  public async findOneCustomer(id: string): Promise<ResponseCustomer> {
+    const customer = await this.findOneCustomerAllData(id)
 
     return new ResponseCustomer(customer)
   }
@@ -35,12 +42,16 @@ export class CustomersService {
   }
 
   public async updateCustomer(id: string, updateCustomerDto: UpdateCustomerDto): Promise<ResponseCustomer> {
-    const customer = await this.findOneCustomer(id)
+    const customer = await this.findOneCustomerAllData(id)
 
+    if(updateCustomerDto.address){
+      Object.assign(customer.address, updateCustomerDto.address as AddressEntity)
+      delete updateCustomerDto.address
+    }
+    
     Object.assign(customer, updateCustomerDto as CustomerEntity)
 
     const updatedCustomer = await this.customerRepository.save(customer)
-
 
     return new ResponseCustomer(updatedCustomer)
   }

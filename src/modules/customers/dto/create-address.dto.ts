@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString, Length } from "class-validator"
 
-export class AddressDTO {
+export class CreateAddressDTO {
 
     @Length(8, 8)
     @IsString()
