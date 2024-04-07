@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostgresConfigService } from './config/postgres.config.service';
+import { PostgresConfigService } from './db/postgres.config.service';
 import { CustomersModule } from './modules/customers/customers.module';
 import { ProceduresModule } from './modules/procedures/procedures.module';
 import { ProductsModule } from './modules/products/products.module';
