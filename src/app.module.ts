@@ -7,6 +7,8 @@ import { ProceduresModule } from './modules/procedures/procedures.module';
 import { ProductsModule } from './modules/products/products.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { UsersModule } from './modules/users/users.module';
+import { APP_FILTER } from '@nestjs/core';
+import { FilterErrors } from './utilities/filterErrors';
 
 
 @Module({
@@ -24,5 +26,11 @@ import { UsersModule } from './modules/users/users.module';
       inject: [PostgresConfigService],
     }),
   ],
+  providers:[
+    {
+      provide: APP_FILTER,
+      useClass: FilterErrors
+    }
+  ]
 })
 export class AppModule { }
