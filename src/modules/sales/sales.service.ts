@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CustomersService } from '../customers/customers.service'
@@ -47,6 +47,9 @@ export class SalesService {
   }
 
   public async createSale(createSaleDto: CreateSaleDto) {
+
+    if(!createSaleDto.proceduresPerformed && !createSaleDto.productsSold)
+      throw new HttpException(`the sale needs at least one proceduresPerformed or productsSold`, HttpStatus.BAD_REQUEST)
 
     const buildproceduresPerformedSale = () => {if(createSaleDto.proceduresPerformed) return this.buildersForSales.proceduresPerformed(createSaleDto.proceduresPerformed)}
     const buildProductSoldSale = () => {if(createSaleDto.productsSold) return this.buildersForSales.CreateProductsSold(createSaleDto.productsSold)}
