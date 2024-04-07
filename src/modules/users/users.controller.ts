@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
+import { HashPassWord } from 'src/utilities/pipes/hashPassWord.pipe';
 import { CreateUserDTO } from './dto/create-users.dto';
 import { ResponseUser } from './dto/response-user.dto';
 import { UpdateUserDTO } from './dto/update-users.dto';
 import { UsersService } from './users.service';
-import { HashPassWord } from 'src/utilities/pipes/hashPassWord.pipe';
 
 
 @Controller('/users')
@@ -12,7 +12,7 @@ export class UsersController {
 
     @Get('/:id')
     public async findOneUser(@Param('id') id: string): Promise<ResponseUser> {
-        return this.usersService.findUserAllData(id)
+        return this.usersService.findOneUser(id)
     }
 
     @Get()
