@@ -3,6 +3,8 @@ import { CreateUserDTO } from './dto/create-users.dto';
 import { ResponseUser } from './dto/response-user.dto';
 import { UpdateUserDTO } from './dto/update-users.dto';
 import { UsersService } from './users.service';
+import { HashPassWord } from 'src/utilities/pipes/hashPassWord.pipe';
+
 
 @Controller('/users')
 export class UsersController {
@@ -10,7 +12,7 @@ export class UsersController {
 
     @Get('/:id')
     public async findOneUser(@Param('id') id: string): Promise<ResponseUser> {
-        return this.usersService.findOneUser(id)
+        return this.usersService.findUserAllData(id)
     }
 
     @Get()
@@ -19,12 +21,16 @@ export class UsersController {
     }
 
     @Post()
-    public async createUser(@Body() createUserDTO: CreateUserDTO): Promise<ResponseUser> {
+    public async createUser(
+        @Body(HashPassWord) createUserDTO: CreateUserDTO): Promise<ResponseUser> {
+            
         return this.usersService.createUser(createUserDTO)
     }
 
     @Put('/:id')
-    public async updateUser(@Param('id') id: string, @Body() updateUserDTO: UpdateUserDTO): Promise<ResponseUser> {
+    public async updateUser(
+        @Param('id') id: string, @Body(HashPassWord) updateUserDTO: UpdateUserDTO): Promise<ResponseUser> {
+
         return this.usersService.updateUser(id, updateUserDTO)
     }
 
