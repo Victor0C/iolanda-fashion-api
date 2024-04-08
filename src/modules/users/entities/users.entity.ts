@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm';
-import { TypeUser } from '../enums/typeUser.enum';
+import { TypesUser } from '../enums/typesUser.enum';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -18,11 +18,14 @@ export class UserEntity {
   @Column({ name: 'name', length: 255, nullable: false })
   name: string;
 
+  @Column({ name: 'user_Login', length: 255, nullable: false })
+  userLogin: string;
+
   @Column({ name: 'password', length: 255, nullable: false })
   password: string;
 
-  @Column({ name: 'type', length: 13, enum: TypeUser, nullable: false })
-  type: TypeUser;
+  @Column({ name: 'type', length: 13, enum: TypesUser, nullable: false })
+  type: TypesUser;
 
   @OneToMany(() => SaleEntity, sale => sale.user)
   sales: SaleEntity

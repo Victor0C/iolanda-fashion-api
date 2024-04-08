@@ -1,8 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { AdminInterceptor } from '../auth/admin.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { ResponseSale } from './dto/response-sale.dto';
 import { SalesService } from './sales.service';
 
+@UseGuards(AuthGuard)
 @Controller('sales')
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
@@ -22,6 +25,7 @@ export class SalesController {
     return this.salesService.createSale(createSaleDto)
   }
 
+  @UseInterceptors(AdminInterceptor)
   @Delete(':id')
   @HttpCode(204)
   public async deleteSale(@Param('id') id: string): Promise<void> {

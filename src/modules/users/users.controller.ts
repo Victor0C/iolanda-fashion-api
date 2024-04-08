@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
 import { HashPassWord } from 'src/utilities/pipes/hashPassWord.pipe';
+import { AdminInterceptor } from '../auth/admin.interceptor';
+import { AuthGuard } from '../auth/auth.guard';
 import { CreateUserDTO } from './dto/create-users.dto';
 import { ResponseUser } from './dto/response-user.dto';
 import { UpdateUserDTO } from './dto/update-users.dto';
 import { UsersService } from './users.service';
 
-
+@UseGuards(AuthGuard)
+@UseInterceptors(AdminInterceptor)
 @Controller('/users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}

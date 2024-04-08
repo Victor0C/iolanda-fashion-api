@@ -1,9 +1,12 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { ResponseCustomer } from './dto/response-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { AdminInterceptor } from '../auth/admin.interceptor';
 
+@UseGuards(AuthGuard)
 @Controller('/customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) { }
@@ -28,6 +31,7 @@ export class CustomersController {
     return this.customersService.updateCustomer(id, updateCustomerDto)
   }
 
+  @UseInterceptors(AdminInterceptor)
   @Delete('/:id')
   @HttpCode(204)
   public async deleteCustomer(@Param('id') id: string): Promise<void> {

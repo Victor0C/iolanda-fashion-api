@@ -1,4 +1,4 @@
-export enum TypeUser {
+export enum TypesUser {
   ADMINISTRATOR = 'administrator',
   COLLABORATOR = 'collaborator',
 }

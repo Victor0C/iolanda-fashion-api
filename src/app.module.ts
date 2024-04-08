@@ -10,6 +10,7 @@ import { UsersModule } from './modules/users/users.module';
 import { APP_FILTER } from '@nestjs/core';
 import { FilterErrors } from './utilities/Errors/filterErrors';
 import { UuidValidationMiddleware } from './utilities/Middlewares/uuidValidation.middleware';
+import { AuthModule } from './modules/auth/auth.module';
 
 
 @Module({
@@ -19,6 +20,7 @@ import { UuidValidationMiddleware } from './utilities/Middlewares/uuidValidation
     ProceduresModule,
     CustomersModule,
     SalesModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
-import { TypeUser } from "../enums/typeUser.enum";
+import { TypesUser } from "../enums/typesUser.enum";
 
 export class CreateUserDTO {
 
@@ -7,13 +7,17 @@ export class CreateUserDTO {
     @IsString()
     name: string;
 
+    @IsNotEmpty({ message: 'the userLogin field cannot be empty' })
+    @IsString()
+    userLogin: string
+
     @IsString()
     @MinLength(6, { message: 'Password must be at least 6 characters long' })
     @IsNotEmpty({ message: 'the password field cannot be empty' })
     password: string;
 
-    @IsEnum(TypeUser)
+    @IsEnum(TypesUser)
     @IsNotEmpty({ message: 'the type field cannot be empty' })
-    type: TypeUser;
+    type: TypesUser;
 
 }
