@@ -12,13 +12,13 @@ export class CreateCustomerDto {
     name: string
 
     @ApiProperty()
-    @Length(11, 11)
+    @Length(11, 11,{message: 'the cpf must have 11 characters'})
     @IsString()
     @IsNotEmpty({ message: 'the cpf field cannot be empty' })
     cpf: string
 
     @ApiProperty()
-    @Length(9, 9)
+    @Length(9, 9, {message: 'the tel must have 11 characters'})
     @IsString()
     @IsNotEmpty({ message: 'the tel field cannot be empty' })
     tel: string

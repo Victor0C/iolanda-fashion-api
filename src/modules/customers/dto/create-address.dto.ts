@@ -4,7 +4,7 @@ import { IsNotEmpty, IsNumber, IsString, Length } from "class-validator"
 export class CreateAddressDTO {
 
     @ApiProperty()
-    @Length(8, 8)
+    @Length(8, 8, {message: 'the cep must have 8 characters'})
     @IsString()
     @IsNotEmpty({ message: 'the cep field cannot be empty' })
     cep: string
