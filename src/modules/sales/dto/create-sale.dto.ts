@@ -9,16 +9,14 @@ export class CreateSaleDto {
     @ApiProperty()
     @IsUUID()
     @IsString()
-    @IsNotEmpty({ message: 'the id_user field cannot be empty' })
-    id_user: string
-
-    @ApiProperty()
-    @IsUUID()
-    @IsString()
     @IsNotEmpty({ message: 'the id_customer field cannot be empty' })
     id_customer: string
 
-    @ApiProperty({required: false})
+    @ApiProperty({ 
+        type: CreateProceduresPerformedDTO,
+        isArray: true,
+        required: false,
+    })
     @ValidateNested()
     @Type(() => CreateProceduresPerformedDTO)
     @ArrayMinSize(1)
@@ -26,7 +24,11 @@ export class CreateSaleDto {
     @IsOptional()
     proceduresPerformed: CreateProceduresPerformedDTO[]
 
-    @ApiProperty({required: false})
+    @ApiProperty({ 
+        type: CreateProductsSoldDTO,
+        isArray: true,
+        required: false,
+    })
     @ValidateNested()
     @Type(() => CreateProductsSoldDTO)
     @ArrayMinSize(1)
