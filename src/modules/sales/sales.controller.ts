@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AdminInterceptor } from '../auth/admin.interceptor';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { ResponseSale } from './dto/response-sale.dto';
 import { SalesService } from './sales.service';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RequestWithUser } from '../auth/Interfaces/request-with-user.interface';
 
 @ApiBearerAuth()
 @ApiTags('Sales')
@@ -43,8 +44,9 @@ export class SalesController {
   })
   @ApiBody({type: CreateSaleDto})
   @Post()
-  public async createSale(@Body() createSaleDto: CreateSaleDto): Promise<ResponseSale>{
-    return this.salesService.createSale(createSaleDto)
+  public async createSale(@Body() createSaleDto: CreateSaleDto, @Req() request: RequestWithUser): Promise<ResponseSale>{
+    console.log(request.user.sub)
+    return this.salesService.createSale(request.user.sub, createSaleDto)
   }
 
   @ApiOperation({ summary: 'Deleted a sale' })

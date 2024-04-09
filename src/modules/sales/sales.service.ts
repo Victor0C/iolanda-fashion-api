@@ -56,15 +56,14 @@ export class SalesService {
     return saleData.map((sale) => new ResponseSale(sale))
   }
 
-  public async createSale(createSaleDto: CreateSaleDto): Promise<ResponseSale> {
-
+  public async createSale(id_user: string, createSaleDto: CreateSaleDto): Promise<ResponseSale> {
     if(!createSaleDto.proceduresPerformed && !createSaleDto.productsSold)
       throw new HttpException(`the sale needs at least one proceduresPerformed or productsSold`, HttpStatus.BAD_REQUEST)
 
     const buildproceduresPerformedSale = () => {if(createSaleDto.proceduresPerformed) return this.buildersForSales.proceduresPerformed(createSaleDto.proceduresPerformed)}
     const buildProductSoldSale = () => {if(createSaleDto.productsSold) return this.buildersForSales.CreateProductsSold(createSaleDto.productsSold)}
 
-    const userSale = await this.userService.findUserAllData(createSaleDto.id_user)
+    const userSale = await this.userService.findUserAllData(id_user)
     const customerSale = await this.customerService.findOneCustomer(createSaleDto.id_customer)
     const proceduresPerformedSale = await buildproceduresPerformedSale()
     const productSoldSale = await buildProductSoldSale()
@@ -77,11 +76,11 @@ export class SalesService {
       productsSold: productSoldSale,
       price: priceSale,
     }
-
     const saleEntity = new SaleEntity()
     Object.assign(saleEntity, objectForEntity as SaleEntity)
 
     const sale = await this.saleRepository.save(saleEntity)
+    
 
     return new ResponseSale(sale)
   }
