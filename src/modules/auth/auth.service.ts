@@ -4,6 +4,7 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from "bcrypt"
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayLoad } from 'src/modules/auth/Interfaces/payload-jwt.interface';
+import { ResponseLogin } from './dto/response-user-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,8 +25,8 @@ export class AuthService {
       type: user.type
     }
 
-    return {
-      acess_token: await this.jwtService.signAsync(payload)
-    }
+    const acess_token = await this.jwtService.signAsync(payload)
+
+    return new ResponseLogin(acess_token)
   }
 }

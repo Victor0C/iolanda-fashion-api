@@ -12,6 +12,7 @@ import { FilterErrors } from './utilities/Errors/filterErrors';
 import { UuidValidationMiddleware } from './utilities/Middlewares/uuidValidation.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { LoggerGlobalInterceptor } from './utilities/logger/logger-global.interceptor';
+import { AppController } from './app.controller';
 
 
 @Module({
@@ -30,6 +31,7 @@ import { LoggerGlobalInterceptor } from './utilities/logger/logger-global.interc
       inject: [PostgresConfigService],
     }),
   ],
+  controllers:[AppController],
   providers:[
     ConsoleLogger,
     {

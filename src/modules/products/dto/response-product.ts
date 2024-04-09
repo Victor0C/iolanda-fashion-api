@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { ProductEntity } from "../entities/product.entity";
 
 export class ResponseProduct {
@@ -8,4 +9,25 @@ export class ResponseProduct {
 
         return product
     }
+
+    @ApiProperty()
+    id: string
+
+    @ApiProperty()
+    name: string
+
+    @ApiProperty()
+    description: string
+
+    @ApiProperty()
+    amount: number
+
+    @ApiProperty()
+    price: number
+
+    @ApiProperty()
+    createdAT: String;
+
+    @ApiProperty()
+    updatedAT: string;
 }

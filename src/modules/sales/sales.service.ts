@@ -24,7 +24,15 @@ export class SalesService {
   ) {}
 
   public async findOneSaleAllData(id: string): Promise<SaleEntity> {
-    const sale = await this.saleRepository.findOne({where: { id }, relations: { user: true, proceduresPerformed: true, productsSold: true }})
+    const sale = await this.saleRepository.findOne({
+      where: { id },
+       relations: { 
+        user: true,
+        customer:true,
+        proceduresPerformed: true,
+        productsSold: true
+      }
+    })
 
     if (!sale) throw new NotFoundException(`Sale not found (id: ${id})`)
 
@@ -38,7 +46,12 @@ export class SalesService {
   }
 
   public async findAllSales(): Promise<ResponseSale[]> {
-    const saleData = await this.saleRepository.find()
+    const saleData = await this.saleRepository.find({relations: { 
+      user: true,
+      customer:true,
+      proceduresPerformed: true,
+      productsSold: true
+    }})
 
     return saleData.map((sale) => new ResponseSale(sale))
   }

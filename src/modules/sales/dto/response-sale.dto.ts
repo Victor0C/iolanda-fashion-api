@@ -1,5 +1,13 @@
-import { ResponseUser } from "src/modules/users/dto/response-user.dto";
+import { UserEntity } from "src/modules/users/entities/users.entity";
 import { SaleEntity } from "../entities/sale.entity";
+import { ResponseUserForSale } from "./response-sale-user.dto";
+import { ResponseCustomerForSale } from "./response-sale-customer.dto";
+import { CustomerEntity } from "src/modules/customers/entities/customer.entity";
+import { ResponseProceduresPerfomerdForSales } from "./response-sale-proceduresPerformed.dto";
+import { ProceduresPerformedEntity } from "../entities/proceduresPerformed.entity";
+import { ProductsSoldEntity } from "../entities/productsSold.entity";
+import { ResponseProducstSoldForSales } from "./response-sale-productsSold-dto";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class ResponseSale {
     constructor(sale: SaleEntity) {
@@ -8,50 +16,47 @@ export class ResponseSale {
 
         sale.price = sale.price / 100
 
-        if (sale.user) {
-            delete sale.user.type
-            delete sale.user.password
-            delete sale.user.createdAT
-            delete sale.user.updatedAT
-            delete sale.user.deletedAT
-        }
+        sale.user = new ResponseUserForSale(sale.user) as UserEntity
 
-        if (sale.customer) {
-            delete sale.customer.createdAT
-            if (sale.customer.deletedAT) delete sale.customer.deletedAT
-            delete sale.customer.updatedAT
-            delete sale.customer.cpf
-            delete sale.customer.tel
-            delete sale.customer.whatsapp
-            delete sale.customer.address
-        }
-
+        sale.customer = new ResponseCustomerForSale(sale.customer) as CustomerEntity
+        
         if (sale.proceduresPerformed) {
-            sale.proceduresPerformed.forEach(
-                (procedurePerformed) => {
-
-                    procedurePerformed.price = procedurePerformed.price / 100
-
-                    if (procedurePerformed?.procedure) {
-                        delete procedurePerformed.procedure
-                    }
-                }
+            sale.proceduresPerformed = sale.proceduresPerformed.map(
+                (procedurePerformed) =>  new ResponseProceduresPerfomerdForSales(procedurePerformed) as ProceduresPerformedEntity
             )
         }
 
         if (sale.productsSold) {
-            sale.productsSold.forEach(
-                (productsSold) => {
-
-                    productsSold.price = productsSold.price / 100
-
-                    if (productsSold?.product) {
-                        delete productsSold.product
-                    }
-                }
+            sale.productsSold = sale.productsSold.map(
+                (productSold) => new ResponseProducstSoldForSales(productSold) as ProductsSoldEntity
             )
         }
 
         return sale
     }
+
+    @ApiProperty()
+    id: string;
+    
+    @ApiProperty({type: ResponseUserForSale})
+    user: ResponseUserForSale;
+  
+    @ApiProperty({type: ResponseUserForSale})
+    customer: ResponseCustomerForSale;
+  
+    @ApiProperty({type: ResponseProceduresPerfomerdForSales, isArray: true})
+    proceduresPerformed: ResponseProceduresPerfomerdForSales[];
+  
+    @ApiProperty({type:ResponseProducstSoldForSales, isArray: true})
+    productsSold: ResponseProducstSoldForSales[];
+  
+    @ApiProperty()
+    price: number;
+  
+    @ApiProperty()
+    createdAT: String;
+  
+    @ApiProperty()
+    updatedAT: string;
+
 }
