@@ -6,6 +6,8 @@ export class ResponseProceduresPerfomerdForSales{
         procedurePerformed.price = procedurePerformed.price / 100
         
         delete procedurePerformed.procedure
+
+        return procedurePerformed
     }
 
     @ApiProperty()
