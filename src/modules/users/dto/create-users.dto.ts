@@ -1,17 +1,19 @@
 import { IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
 import { TypesUser } from "../enums/typesUser.enum";
 import { ApiProperty } from "@nestjs/swagger";
+import { UserLogin } from "../validation/userLogin.validator";
 
 export class CreateUserDTO {
 
     @ApiProperty({required: true})
-    @IsNotEmpty({ message: 'the name field cannot be empty' })
     @IsString()
+    @IsNotEmpty({ message: 'the name field cannot be empty' })
     name: string;
 
     @ApiProperty({required: true})
-    @IsNotEmpty({ message: 'the userLogin field cannot be empty' })
+    @UserLogin({message: 'userLogin is already being used'})
     @IsString()
+    @IsNotEmpty({ message: 'the userLogin field cannot be empty' })
     userLogin: string
 
     @ApiProperty({required: true})

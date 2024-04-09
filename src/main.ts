@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -10,15 +11,19 @@ async function bootstrap() {
   const port = configService.get('PORT_API')
   
   if (!port) throw new Error("Application port wasn't found")
-
+  
+  useContainer(app.select(AppModule), { fallbackOnErrors: true })
+    
   app.useGlobalPipes(
-    new ValidationPipe({
+  new ValidationPipe({
       transform: true,
       whitelist: true,
       forbidNonWhitelisted: true,
-      
+        
     })
   )
+  
+
 
   const config = new DocumentBuilder()
     .setTitle('IOLANDA FASHION API')

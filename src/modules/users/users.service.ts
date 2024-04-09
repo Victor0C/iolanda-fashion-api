@@ -25,6 +25,7 @@ export class UsersService {
 
         return user
     }
+    
     public async findOneUser(id: string): Promise<ResponseUser> {
         const user = await this.findUserAllData(id)
 
