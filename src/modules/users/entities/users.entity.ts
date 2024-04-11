@@ -6,7 +6,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 import { TypesUser } from '../enums/typesUser.enum';
 
@@ -27,11 +27,11 @@ export class UserEntity {
   @Column({ name: 'type', length: 13, enum: TypesUser, nullable: false })
   type: TypesUser;
 
-  @OneToMany(() => SaleEntity, sale => sale.user)
-  sales: SaleEntity
+  @OneToMany(() => SaleEntity, (sale) => sale.user)
+  sales: SaleEntity;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAT: String;
+  createdAT: string;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAT: string;

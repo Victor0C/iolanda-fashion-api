@@ -8,58 +8,65 @@ import { UserEntity } from './entities/users.entity';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>) { }
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
 
-    public async findUserAllData(id: string): Promise<UserEntity> {
-        const user = await this.userRepository.findOne({where: { id }})
+  public async findUserAllData(id: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id } });
 
-        if (!user) throw new NotFoundException(`User not found (id: ${id})`)
+    if (!user) throw new NotFoundException(`User not found (id: ${id})`);
 
-        return user
-    }
+    return user;
+  }
 
-    public async findUserLogin(userLogin: string): Promise<UserEntity> {
-        const user = await this.userRepository.findOne({where: { userLogin }})
+  public async findUserLogin(userLogin: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { userLogin } });
 
-        if (!user) throw new NotFoundException(`User not found (userLogin: ${userLogin})`)
+    if (!user)
+      throw new NotFoundException(`User not found (userLogin: ${userLogin})`);
 
-        return user
-    }
-    
-    public async findOneUser(id: string): Promise<ResponseUser> {
-        const user = await this.findUserAllData(id)
+    return user;
+  }
 
-        return new ResponseUser(user)
-    }
+  public async findOneUser(id: string): Promise<ResponseUser> {
+    const user = await this.findUserAllData(id);
 
-    public async findAllUsers(): Promise<ResponseUser[]> {
-        const dataUsers = await this.userRepository.find()
+    return new ResponseUser(user);
+  }
 
-        const users = dataUsers.map((user) => new ResponseUser(user))
+  public async findAllUsers(): Promise<ResponseUser[]> {
+    const dataUsers = await this.userRepository.find();
 
-        return users
-    }
+    const users = dataUsers.map((user) => new ResponseUser(user));
 
-    public async createUser(newUserData: CreateUserDTO): Promise<ResponseUser> {
-        const userEntity = new UserEntity()
-        Object.assign(userEntity, newUserData as UserEntity)
+    return users;
+  }
 
-        const newUser = await this.userRepository.save(userEntity)
+  public async createUser(newUserData: CreateUserDTO): Promise<ResponseUser> {
+    const userEntity = new UserEntity();
+    Object.assign(userEntity, newUserData as UserEntity);
 
-        return new ResponseUser(newUser)
-    }
+    const newUser = await this.userRepository.save(userEntity);
 
-    public async updateUser(id: string, newUserData: UpdateUserDTO): Promise<ResponseUser> {
-        const user = await this.findUserAllData(id)
-        Object.assign(user, newUserData as UserEntity)
+    return new ResponseUser(newUser);
+  }
 
-        const updatedUser = await this.userRepository.save(user)
+  public async updateUser(
+    id: string,
+    newUserData: UpdateUserDTO,
+  ): Promise<ResponseUser> {
+    const user = await this.findUserAllData(id);
+    Object.assign(user, newUserData as UserEntity);
 
-        return new ResponseUser(updatedUser)
-    }
+    const updatedUser = await this.userRepository.save(user);
 
-    public async deleteUser(id: string): Promise<void> {
-        await this.findUserAllData(id)
-        await this.userRepository.delete(id)
-    }
+    return new ResponseUser(updatedUser);
+  }
+
+  public async deleteUser(id: string): Promise<void> {
+    await this.findUserAllData(id);
+    await this.userRepository.delete(id);
+  }
 }

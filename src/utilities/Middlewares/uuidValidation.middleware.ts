@@ -10,7 +10,7 @@ export class UuidValidationMiddleware implements NestMiddleware {
     if (!uuid.validate(id)) {
       return res.status(400).json({ error: 'Invalid UUID' });
     }
-    
+
     next();
   }
 }

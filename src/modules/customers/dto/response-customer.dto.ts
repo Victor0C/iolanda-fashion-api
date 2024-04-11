@@ -1,39 +1,39 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { CustomerEntity } from "../entities/customer.entity";
-import { ResponseAddress } from "./response-address.dto";
-import { AddressEntity } from "../entities/address.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { CustomerEntity } from '../entities/customer.entity';
+import { ResponseAddress } from './response-address.dto';
+import { AddressEntity } from '../entities/address.entity';
 
 export class ResponseCustomer {
-    constructor(customer: CustomerEntity) {
-        delete customer.deletedAT
-        if (customer.address) {
-            customer.address = new ResponseAddress(customer.address) as AddressEntity
-        }
-
-        return customer
+  constructor(customer: CustomerEntity) {
+    delete customer.deletedAT;
+    if (customer.address) {
+      customer.address = new ResponseAddress(customer.address) as AddressEntity;
     }
 
-    @ApiProperty()
-    id: string
+    return customer;
+  }
 
-    @ApiProperty()
-    name: string
+  @ApiProperty()
+  id: string;
 
-    @ApiProperty()
-    cpf: string
+  @ApiProperty()
+  name: string;
 
-    @ApiProperty()
-    tel: string
+  @ApiProperty()
+  cpf: string;
 
-    @ApiProperty()
-    whatsapp: boolean
+  @ApiProperty()
+  tel: string;
 
-    @ApiProperty({type: () => ResponseAddress})
-    address: ResponseAddress
+  @ApiProperty()
+  whatsapp: boolean;
 
-    @ApiProperty()
-    createdAT: String;
+  @ApiProperty({ type: () => ResponseAddress })
+  address: ResponseAddress;
 
-    @ApiProperty()
-    updatedAT: string;
+  @ApiProperty()
+  createdAT: string;
+
+  @ApiProperty()
+  updatedAT: string;
 }

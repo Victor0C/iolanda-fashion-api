@@ -1,33 +1,40 @@
-import { ProductsSoldEntity } from "../../sales/entities/productsSold.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ProductsSoldEntity } from '../../sales/entities/productsSold.entity';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'product' })
 export class ProductEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({ name: 'name', length: '255', nullable: false })
-    name: string
+  @Column({ name: 'name', length: '255', nullable: false })
+  name: string;
 
-    @Column({ name: 'description', length: '255', nullable: false })
-    description: string
+  @Column({ name: 'description', length: '255', nullable: false })
+  description: string;
 
-    @Column({ name: 'amount', nullable: false })
-    amount: number
+  @Column({ name: 'amount', nullable: false })
+  amount: number;
 
-    @OneToMany(() => ProductsSoldEntity, productSold => productSold.product)
-    productSold: ProductsSoldEntity
+  @OneToMany(() => ProductsSoldEntity, (productSold) => productSold.product)
+  productSold: ProductsSoldEntity;
 
-    @Column({ name: 'price', nullable: false })
-    price: number
+  @Column({ name: 'price', nullable: false })
+  price: number;
 
-    @CreateDateColumn({ name: 'created_at' })
-    createdAT: String;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAT: string;
 
-    @UpdateDateColumn({ name: 'updated_at' })
-    updatedAT: string;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAT: string;
 
-    @DeleteDateColumn({ name: 'deleted_at' })
-    deletedAT: string;
-
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAT: string;
 }

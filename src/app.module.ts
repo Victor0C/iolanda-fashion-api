@@ -1,4 +1,9 @@
-import { ConsoleLogger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  ConsoleLogger,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './db/postgres.config.service';
@@ -13,7 +18,6 @@ import { UuidValidationMiddleware } from './utilities/Middlewares/uuidValidation
 import { AuthModule } from './modules/auth/auth.module';
 import { LoggerGlobalInterceptor } from './utilities/logger/logger-global.interceptor';
 import { AppController } from './app.controller';
-
 
 @Module({
   imports: [
@@ -31,27 +35,29 @@ import { AppController } from './app.controller';
       inject: [PostgresConfigService],
     }),
   ],
-  controllers:[AppController],
-  providers:[
+  controllers: [AppController],
+  providers: [
     ConsoleLogger,
     {
       provide: APP_FILTER,
-      useClass: FilterErrors
+      useClass: FilterErrors,
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass:LoggerGlobalInterceptor
-    }
-  ]
+      useClass: LoggerGlobalInterceptor,
+    },
+  ],
 })
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UuidValidationMiddleware).forRoutes(
-      'users/:id',
-      'sales/:id',
-      'products/:id',
-      'procedures/:id',
-      'customers/:id'
-    )
+    consumer
+      .apply(UuidValidationMiddleware)
+      .forRoutes(
+        'users/:id',
+        'sales/:id',
+        'products/:id',
+        'procedures/:id',
+        'customers/:id',
+      );
   }
 }

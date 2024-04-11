@@ -16,9 +16,12 @@ export class ProductsSoldEntity {
   @ManyToOne(() => ProductEntity, (product) => product.productSold)
   product: ProductEntity;
 
-  @ManyToOne(() => SaleEntity, (sale) => sale.productsSold, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+  @ManyToOne(() => SaleEntity, (sale) => sale.productsSold, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   sale: SaleEntity;
 
-  @Column({name: 'price', nullable: false})
+  @Column({ name: 'price', nullable: false })
   price: number;
 }

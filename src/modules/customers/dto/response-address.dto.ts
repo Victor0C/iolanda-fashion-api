@@ -1,39 +1,38 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { AddressEntity } from "../entities/address.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { AddressEntity } from '../entities/address.entity';
 
-export class ResponseAddress{
-    constructor(address: AddressEntity){
-        delete address.id
-        delete address.deletedAT
+export class ResponseAddress {
+  constructor(address: AddressEntity) {
+    delete address.id;
+    delete address.deletedAT;
 
-        return address
-    }
-    
-    @ApiProperty()
-    cep: string
+    return address;
+  }
 
-    @ApiProperty()
-    city: string
+  @ApiProperty()
+  cep: string;
 
-    @ApiProperty()
-    state: string
+  @ApiProperty()
+  city: string;
 
-    @ApiProperty()
-    road: string
+  @ApiProperty()
+  state: string;
 
-    @ApiProperty()
-    neighborhood: string
+  @ApiProperty()
+  road: string;
 
-    @ApiProperty()
-    number: number
+  @ApiProperty()
+  neighborhood: string;
 
-    @ApiProperty()
-    complement: string
+  @ApiProperty()
+  number: number;
 
-    @ApiProperty()
-    createdAT: String;
+  @ApiProperty()
+  complement: string;
 
-    @ApiProperty()
-    updatedAT: string;
+  @ApiProperty()
+  createdAT: string;
 
+  @ApiProperty()
+  updatedAT: string;
 }

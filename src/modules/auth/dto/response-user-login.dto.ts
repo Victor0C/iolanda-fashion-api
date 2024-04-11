@@ -1,12 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseLogin {
-    constructor(acess_token: string){
-        return {
-            acess_token
-        }
-    }
+  constructor(acess_token: string) {
+    return {
+      acess_token,
+    };
+  }
 
-    @ApiProperty()
-    acess_token: string
+  @ApiProperty()
+  acess_token: string;
 }

@@ -11,13 +11,13 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Get the authentication token' })
   @ApiResponse({
-    status:201,
-    description:'User data returned successfully',
-    type: ResponseLogin
+    status: 201,
+    description: 'User data returned successfully',
+    type: ResponseLogin,
   })
-  @ApiBody({type: AuthDTO})
+  @ApiBody({ type: AuthDTO })
   @Post()
-  public async login(@Body() authDTO: AuthDTO): Promise<ResponseLogin>  {
-    return this.authService.login(authDTO)
+  public async login(@Body() authDTO: AuthDTO): Promise<ResponseLogin> {
+    return this.authService.login(authDTO);
   }
 }

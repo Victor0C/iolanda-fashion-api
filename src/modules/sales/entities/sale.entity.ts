@@ -24,17 +24,29 @@ export class SaleEntity {
   @ManyToOne(() => CustomerEntity, (customer) => customer.sales)
   customer: CustomerEntity;
 
-  @OneToMany(() => ProceduresPerformedEntity, (proceduresPerformed) => proceduresPerformed.sale, { cascade: true })
+  @OneToMany(
+    () => ProceduresPerformedEntity,
+    (proceduresPerformed) => proceduresPerformed.sale,
+    { cascade: true },
+  )
   proceduresPerformed: ProceduresPerformedEntity[];
 
-  @OneToMany(() => ProductsSoldEntity, (productSold) => productSold.sale, {cascade: true})
+  @OneToMany(() => ProductsSoldEntity, (productSold) => productSold.sale, {
+    cascade: true,
+  })
   productsSold: ProductsSoldEntity[];
 
-  @Column({name: 'price',type: 'numeric', precision: 10, scale: 2, nullable: false,})
+  @Column({
+    name: 'price',
+    type: 'numeric',
+    precision: 10,
+    scale: 2,
+    nullable: false,
+  })
   price: number;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAT: String;
+  createdAT: string;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAT: string;

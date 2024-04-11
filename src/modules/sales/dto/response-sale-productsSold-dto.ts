@@ -1,22 +1,22 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ProductsSoldEntity } from "../entities/productsSold.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { ProductsSoldEntity } from '../entities/productsSold.entity';
 
-export class ResponseProducstSoldForSales{
-    constructor(productSold: ProductsSoldEntity){
-        delete productSold.product
+export class ResponseProducstSoldForSales {
+  constructor(productSold: ProductsSoldEntity) {
+    delete productSold.product;
 
-        return productSold
-    }
+    return productSold;
+  }
 
-    @ApiProperty()
-    id: string;
-  
-    @ApiProperty()
-    name: string;
-  
-    @ApiProperty()
-    amount: number;
-  
-    @ApiProperty()
-    price: number;
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  amount: number;
+
+  @ApiProperty()
+  price: number;
 }

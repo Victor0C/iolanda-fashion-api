@@ -1,29 +1,40 @@
-import { ProceduresPerformedEntity } from "../../sales/entities/proceduresPerformed.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { ProceduresPerformedEntity } from '../../sales/entities/proceduresPerformed.entity';
 
 @Entity({ name: 'procedure' })
 export class ProcedureEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({ name: 'name', length: 255, nullable: false })
-    name: string
+  @Column({ name: 'name', length: 255, nullable: false })
+  name: string;
 
-    @Column({ name: 'description', length: 255, nullable: false })
-    description: string
+  @Column({ name: 'description', length: 255, nullable: false })
+  description: string;
 
-    @Column({ name: 'price', nullable: false })
-    price: number
+  @Column({ name: 'price', nullable: false })
+  price: number;
 
-    @OneToMany(() => ProceduresPerformedEntity, procedurePerformed => procedurePerformed.procedure)
-    proceduresPerformed: ProceduresPerformedEntity
+  @OneToMany(
+    () => ProceduresPerformedEntity,
+    (procedurePerformed) => procedurePerformed.procedure,
+  )
+  proceduresPerformed: ProceduresPerformedEntity;
 
-    @CreateDateColumn({ name: 'created_at' })
-    createdAT: String;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAT: string;
 
-    @UpdateDateColumn({ name: 'updated_at' })
-    updatedAT: string;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAT: string;
 
-    @DeleteDateColumn({ name: 'deleted_at' })
-    deletedAT: string;
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAT: string;
 }

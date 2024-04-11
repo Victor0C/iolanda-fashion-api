@@ -10,16 +10,15 @@ import { SaleEntity } from './entities/sale.entity';
 import { SalesController } from './sales.controller';
 import { SalesService } from './sales.service';
 
-
 @Module({
   imports: [
     UsersModule,
     ProductsModule,
     ProceduresModule,
     CustomersModule,
-    TypeOrmModule.forFeature([SaleEntity, ProductsSoldEntity])
+    TypeOrmModule.forFeature([SaleEntity, ProductsSoldEntity]),
   ],
   controllers: [SalesController],
   providers: [SalesService, BuildersForSales],
 })
-export class SalesModule { }
+export class SalesModule {}

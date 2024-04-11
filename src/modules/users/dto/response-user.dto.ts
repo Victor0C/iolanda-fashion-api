@@ -1,31 +1,30 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { UserEntity } from "../entities/users.entity";
-import { TypesUser } from "../enums/typesUser.enum";
+import { ApiProperty } from '@nestjs/swagger';
+import { UserEntity } from '../entities/users.entity';
+import { TypesUser } from '../enums/typesUser.enum';
 
 export class ResponseUser {
-    constructor(user: UserEntity) {
-        delete user.password
-        delete user.deletedAT
+  constructor(user: UserEntity) {
+    delete user.password;
+    delete user.deletedAT;
 
-        return user
-    }
+    return user;
+  }
 
-    @ApiProperty()
-    id: string
+  @ApiProperty()
+  id: string;
 
-    @ApiProperty()
-    name: string
+  @ApiProperty()
+  name: string;
 
-    @ApiProperty()
-    userLogin: string
+  @ApiProperty()
+  userLogin: string;
 
-    @ApiProperty({enum:TypesUser})
-    type: TypesUser
+  @ApiProperty({ enum: TypesUser })
+  type: TypesUser;
 
-    @ApiProperty()
-    createdAT: String
-    
-    @ApiProperty()
-    updatedAT: string
-  
+  @ApiProperty()
+  createdAT: string;
+
+  @ApiProperty()
+  updatedAT: string;
 }

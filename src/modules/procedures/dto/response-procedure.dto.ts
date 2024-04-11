@@ -1,28 +1,28 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ProcedureEntity } from "../entities/procedure.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { ProcedureEntity } from '../entities/procedure.entity';
 
 export class ResponseProcedure {
-    constructor(procedure: ProcedureEntity ){
-        delete procedure.deletedAT
-        
-        return procedure
-    }
+  constructor(procedure: ProcedureEntity) {
+    delete procedure.deletedAT;
 
-    @ApiProperty()
-    id: string
+    return procedure;
+  }
 
-    @ApiProperty()
-    name: string
+  @ApiProperty()
+  id: string;
 
-    @ApiProperty()
-    description: string
+  @ApiProperty()
+  name: string;
 
-    @ApiProperty()
-    price: number
+  @ApiProperty()
+  description: string;
 
-    @ApiProperty()
-    createdAT: String;
+  @ApiProperty()
+  price: number;
 
-    @ApiProperty()
-    updatedAT: string;
+  @ApiProperty()
+  createdAT: string;
+
+  @ApiProperty()
+  updatedAT: string;
 }

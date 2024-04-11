@@ -1,5 +1,5 @@
-export interface JwtPayLoad{
-    sub: string,
-    nameUser: string,
-    type: string
+export interface JwtPayLoad {
+  sub: string;
+  nameUser: string;
+  type: string;
 }

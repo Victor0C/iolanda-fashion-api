@@ -8,58 +8,69 @@ import { ProcedureEntity } from './entities/procedure.entity';
 
 @Injectable()
 export class ProceduresService {
-  constructor(@InjectRepository(ProcedureEntity) private readonly procedureRepository: Repository<ProcedureEntity>) { }
+  constructor(
+    @InjectRepository(ProcedureEntity)
+    private readonly procedureRepository: Repository<ProcedureEntity>,
+  ) {}
 
   public async findOneProcedureAllData(id: string): Promise<ProcedureEntity> {
-    const procedure = await this.procedureRepository.findOne({where:{ id }})
+    const procedure = await this.procedureRepository.findOne({ where: { id } });
 
-    if (!procedure) throw new NotFoundException(`Procedure not found (id: ${id})`)
+    if (!procedure)
+      throw new NotFoundException(`Procedure not found (id: ${id})`);
 
-    return procedure
+    return procedure;
   }
 
   public async findOneProcedure(id: string): Promise<ResponseProcedure> {
-    const procedure = await this.procedureRepository.findOneBy({ id })
+    const procedure = await this.procedureRepository.findOneBy({ id });
 
-    if (!procedure) throw new NotFoundException('Procedure not found')
+    if (!procedure) throw new NotFoundException('Procedure not found');
 
-    return new ResponseProcedure(procedure)
+    return new ResponseProcedure(procedure);
   }
 
   public async findAllProcedures(): Promise<ResponseProcedure[]> {
-    const dataProcedures = await this.procedureRepository.find()
+    const dataProcedures = await this.procedureRepository.find();
 
-    const procedures = dataProcedures.map(procedure => new ResponseProcedure(procedure))
+    const procedures = dataProcedures.map(
+      (procedure) => new ResponseProcedure(procedure),
+    );
 
-    return procedures
+    return procedures;
   }
 
-  public async createProcedure(createProcedureDto: CreateProcedureDto): Promise<ResponseProcedure> {
-    const procedureEntity = new ProcedureEntity()
-    
-    Object.assign(procedureEntity, createProcedureDto as ProcedureEntity)
-    procedureEntity.price = createProcedureDto.price * 100
+  public async createProcedure(
+    createProcedureDto: CreateProcedureDto,
+  ): Promise<ResponseProcedure> {
+    const procedureEntity = new ProcedureEntity();
 
-    const newProcedure = await this.procedureRepository.save(procedureEntity)
+    Object.assign(procedureEntity, createProcedureDto as ProcedureEntity);
+    procedureEntity.price = createProcedureDto.price * 100;
 
-    return new ResponseProcedure(newProcedure)
+    const newProcedure = await this.procedureRepository.save(procedureEntity);
+
+    return new ResponseProcedure(newProcedure);
   }
 
-  public async updateProcedure(id: string, updateProcedureDto: UpdateProcedureDto): Promise<ResponseProcedure> {
-    const procedure = await this.findOneProcedure(id)
+  public async updateProcedure(
+    id: string,
+    updateProcedureDto: UpdateProcedureDto,
+  ): Promise<ResponseProcedure> {
+    const procedure = await this.findOneProcedure(id);
 
-    if(updateProcedureDto.price) updateProcedureDto.price = updateProcedureDto.price * 100
-    
-    Object.assign(procedure, updateProcedureDto as ProcedureEntity)
-    
-    const updatedProcedure = await this.procedureRepository.save(procedure)
+    if (updateProcedureDto.price)
+      updateProcedureDto.price = updateProcedureDto.price * 100;
 
-    return new ResponseProcedure(updatedProcedure)
+    Object.assign(procedure, updateProcedureDto as ProcedureEntity);
+
+    const updatedProcedure = await this.procedureRepository.save(procedure);
+
+    return new ResponseProcedure(updatedProcedure);
   }
 
   public async deleteProcedure(id: string): Promise<void> {
-
-    await this.findOneProcedure(id)
-    await this.procedureRepository.delete(id)
+    await this.findOneProcedure(id);
+    await this.procedureRepository.delete(id);
   }
 }
