@@ -14,8 +14,6 @@ export class ResponseSale {
 
         delete sale.deletedAT
 
-        sale.price = sale.price / 100
-
         sale.user = new ResponseUserForSale(sale.user) as UserEntity
 
         sale.customer = new ResponseCustomerForSale(sale.customer) as CustomerEntity

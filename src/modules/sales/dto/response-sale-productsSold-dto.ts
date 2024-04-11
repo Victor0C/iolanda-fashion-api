@@ -3,8 +3,6 @@ import { ProductsSoldEntity } from "../entities/productsSold.entity";
 
 export class ResponseProducstSoldForSales{
     constructor(productSold: ProductsSoldEntity){
-        productSold.price = productSold.price / 100
-
         delete productSold.product
 
         return productSold
